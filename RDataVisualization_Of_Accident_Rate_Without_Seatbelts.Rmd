@@ -1,0 +1,138 @@
+Tugas Portofolio Geeked
+
+#### Data Visualization of Accident Rate Without Seatbelts
+Kemudahan kita dalam berpergian yaitu dengan menggunakan tranportasi, bisa tranportasi umum maupun transportasi pribadi. Selain memudahkan untuk berpergian, kendaraan pribadi juga dapat menghemat pengeluaran. Namun, sering kali pengemudi kendaraan pribadi tidak bijak dalam penggunaannya, seperti mengemudi tanpa memakai sabuk pengaman. Oleh karena itu, saya berminat dengan data tingkat kecelakaan tanpa menggunakan sabuk pengaman untuk dijadikan pengetahuan saya dan semua orang, dengan melihat visualisasi data dari jumlah kecelakaan tanpa menggunakan sabuk pengaman.
+
+1. Unnamed:0 = nomor
+2. Year = tahun
+          1. 1969
+          2. 1970
+          3. 1971
+          4. 1972
+          5. 1973
+          6. 1974
+          7. 1975
+          8. 1976
+          9. 1977
+          10. 1978
+          11. 1979
+          12. 1980
+          13. 1981
+          14. 1982
+          15. 1983
+          16. 1984
+3. Month = bulan
+4. DriversKilled = jumlah pengemudi yang meninggal
+5. drivers = jumlah pengemudi
+6. front = kecelakaan bagian depan
+7. rear = kecelakaan bagian belakang
+8. kms = kilometer
+9. PetrolPrice = Harga Bensin
+10. VanKilled = Jumlah Pengemudi minibus/van yang meninggal
+11. law = hukum
+
+
+#### Membaca Data
+```{r}
+Seatbelts <- read.csv("seatbelts.csv", stringsAsFactors = FALSE)
+```
+
+#### Memeriksa Data
+```{r}
+head(Seatbelts)
+```
+```{r}
+str(Seatbelts)
+```
+```{r}
+colSums(is.na(Seatbelts))
+```
+```{r}
+seatbelts.u <- Seatbelts[match(unique(Seatbelts$Year),Seatbelts$Year),]
+seatbelts.u
+```
+
+
+
+```{r}
+seatbelts.agt <- seatbelts.u[seatbelts.u$Year == "1969" | seatbelts.u$Year == "1970" | seatbelts.u$Year == "1971" |seatbelts.u$Year == "1972" |seatbelts.u$Year == "1973" |seatbelts.u$Year == "1974" |seatbelts.u$Year == "1975" |seatbelts.u$Year == "1976" |seatbelts.u$Year == "1977" |seatbelts.u$Year == "1978" |seatbelts.u$Year == "1979" |seatbelts.u$Year == "1980"|seatbelts.u$Year == "1981" |seatbelts.u$Year == "1982" |seatbelts.u$Year == "1983" |seatbelts.u$Year == "1984",]
+```
+
+
+```{r}
+table(seatbelts.agt$Year)
+```
+```{r}
+levels(as.factor(seatbelts.u$Year))
+```
+
+#### Tranformasi Data
+```{r}
+drivers_rate <- aggregate(Year ~ drivers, # formula
+          data = seatbelts.u, # data yang dipakai
+          FUN = sum)
+DriversKilled_rate <- aggregate(Year ~ DriversKilled, # formula
+          data = seatbelts.u, # data yang dipakai
+          FUN = sum)
+VanKilled_rate <- aggregate(Year ~ VanKilled, # formula
+          data = seatbelts.u, # data yang dipakai
+          FUN = sum)
+front_rate <- aggregate(Year ~ front, # formula
+          data = seatbelts.u, # data yang dipakai
+          FUN = sum)
+rear_rate <- aggregate(Year ~ rear, # formula
+          data = seatbelts.u, # data yang dipakai
+          FUN = sum)
+```
+
+#### Visualization Data
+#### Line Chart Hubungan Tahun dan Jumlah Pengemudi
+```{r}
+plot(drivers_rate$Year,type = "l", xlab = "Tahun", ylab = "Jumlah Pengemudi")
+```
+##Insight:
+
+#Terdapat pola jumlah pengemudi pada Tahun tertentu.
+#Pengemudi paling banyak pada tahun ke 1-3 yaitu 1971-1973.
+#Scatterplot Hubungan Tahun dan Jumlah Pengemudi
+
+
+
+#### Line Chart Hubungan Tahun dan Jumlah Pengemudi Minibus/Van Yang Meninggal
+```{r}
+plot(VanKilled_rate$Year, xlab = "Tahun", ylab = "Jumlah Pengemudi Minibus/Van yang meninggal")
+```
+##Insight:
+
+#Terdapat pola jumlah pengemudi van/minibus yang meningal pada Tahun tertentu.
+#Pengemudi paling banyak pada tahun ke-8 yaitu 1976
+#Scatterplot Hubungan Tahun dan Jumlah Pengemudi Van/Minibus Yang Meninggal
+
+
+
+#### Line Chart Hubungan Tahun dan Jumlah Kecelakaan Bagian Depan
+```{r}
+plot(front_rate$Year, xlab = "Tahun", ylab = "Kecelakaan Bagian Depan")
+```
+##Insight:
+
+#Terdapat pola jumlah kecelakaan bagian depan pada Tahun tertentu.
+#Kecelakaan bagian depan paling banyak pada tahun ke-5 yaitu 1973
+#Scatterplot Hubungan Tahun dan Jumlah Kecelakaan Bagian Depan
+
+
+
+#### Line Chart Hubungan Tahun dan Jumlah Kecelakaan Bagian Belakang
+```{r}
+plot(rear_rate$Year, xlab = "Tahun", ylab = "Kecelakaan Bagian Belakang")
+```
+##Insight:
+
+#Terdapat pola jumlah kecelakaan bagian belakang pada Tahun tertentu.
+#Kecelakaan bagian belakang paling banyak pada tahun ke-10 yaitu 1978
+#Scatterplot Hubungan Tahun dan Jumlah Kecelakaan Bagian Belakang
+
+
+
+#### Sehingga dapat disimpulkan bahwa :
+#Jumlah pengemudi meninggi pada tahun 1971-1973. Pada tahun 1976 paling banyak jumlah pengemudi van/minibus yang meninggal dunia, dan kecelakaan bagian depan terjadi paling banyak pada tahun 1973, dan kecelakaan bagian belakang terjadi paling banyak pada tahun 1978. Untuk mendapatkan tingkat penurunan kecelakaan yang terjadi yaitu para pengemudi harus selalu menggunakan sabuk pengaman dalam mengendarai kendaraan pribadi atau minibus/van.
